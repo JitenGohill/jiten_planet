@@ -1,5 +1,7 @@
 "use client";
 
+import { Html } from "@react-three/drei";
+import { useState } from "react";
 import { AdditiveBlending } from "three";
 
 import type { LocationMarker, LocationMarkerId } from "./location-markers";
@@ -15,10 +17,18 @@ export function GlobeMarker({
   markerRadius: number;
   onSelect: (id: LocationMarkerId) => void;
 }) {
+  const [isHovered, setIsHovered] = useState(false);
   const position = latLonToPosition(marker.lat, marker.lon, markerRadius);
 
   return (
     <group position={position}>
+      {isHovered ? (
+        <Html center position={[0, 0.24, 0]}>
+          <div className="pointer-events-none whitespace-nowrap rounded-full border border-cyan-200/30 bg-slate-950/80 px-3 py-1.5 text-[0.65rem] font-black uppercase tracking-[0.16em] text-cyan-50 shadow-xl shadow-cyan-950/50 backdrop-blur-md">
+            {marker.label}, {marker.country}
+          </div>
+        </Html>
+      ) : null}
       <mesh scale={active ? 1.75 : 1.35}>
         <sphereGeometry args={[0.09, 20, 20]} />
         <meshBasicMaterial
@@ -36,10 +46,12 @@ export function GlobeMarker({
           onSelect(marker.id);
         }}
         onPointerOut={() => {
+          setIsHovered(false);
           document.body.style.cursor = "";
         }}
         onPointerOver={(event) => {
           event.stopPropagation();
+          setIsHovered(true);
           document.body.style.cursor = "pointer";
         }}
       >
