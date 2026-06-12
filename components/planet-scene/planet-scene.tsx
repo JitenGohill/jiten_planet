@@ -1,23 +1,40 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { BlenderGlobe } from "./blender-globe";
 import { InteractionControls } from "./interaction-controls";
+import { IntroPopup } from "./intro-popup";
 import { LocationCard } from "./location-card";
 import { locationMarkers, type LocationMarkerId } from "./location-markers";
 import { SceneLights } from "./scene-lights";
 import { SkyBackdrop } from "./sky-backdrop";
 import { StarField } from "./star-field";
 
+const INTRO_DISMISSED_KEY = "planet-scene-intro-dismissed";
+
 export default function PlanetScene() {
   const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
   const [selectedMarkerId, setSelectedMarkerId] =
     useState<LocationMarkerId | null>(null);
   const selectedMarker = locationMarkers.find(
     (marker) => marker.id === selectedMarkerId,
   );
+
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      setShowIntro(window.sessionStorage.getItem(INTRO_DISMISSED_KEY) !== "true");
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, []);
+
+  function dismissIntro() {
+    window.sessionStorage.setItem(INTRO_DISMISSED_KEY, "true");
+    setShowIntro(false);
+  }
 
   return (
     <div className="relative h-screen w-screen touch-none overflow-hidden bg-black">
@@ -63,6 +80,7 @@ export default function PlanetScene() {
           </div>
         )}
       </div>
+      {showIntro ? <IntroPopup onDismiss={dismissIntro} /> : null}
     </div>
   );
 }
