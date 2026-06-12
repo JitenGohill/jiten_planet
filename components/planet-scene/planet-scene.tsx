@@ -10,6 +10,7 @@ import { LocationCard } from "./location-card";
 import { locationMarkers, type LocationMarkerId } from "./location-markers";
 import { SceneLights } from "./scene-lights";
 import { SkyBackdrop } from "./sky-backdrop";
+import { SocialLinks } from "./social-links";
 import { StarField } from "./star-field";
 
 const INTRO_DISMISSED_KEY = "planet-scene-intro-dismissed";
@@ -80,6 +81,7 @@ export default function PlanetScene() {
           </div>
         )}
       </div>
+      <SocialLinks />
       {showIntro ? <IntroPopup onDismiss={dismissIntro} /> : null}
     </div>
   );
