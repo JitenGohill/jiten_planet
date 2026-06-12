@@ -2,15 +2,11 @@
 
 export function IntroPopup({ onDismiss }: { onDismiss: () => void }) {
   return (
-    <div className="pointer-events-auto absolute inset-0 z-20 grid place-items-center px-4 py-8">
-      <div
-        className="absolute inset-0 bg-black/35 backdrop-blur-[2px]"
-        aria-hidden="true"
-      />
+    <div className="pointer-events-auto absolute inset-0 z-20 overflow-y-auto overscroll-contain bg-black/35 px-4 py-4 backdrop-blur-[2px] touch-pan-y sm:grid sm:place-items-center sm:py-8">
       <section
         aria-labelledby="intro-popup-title"
         aria-modal="true"
-        className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-cyan-200/25 bg-slate-950/80 p-6 text-cyan-50 shadow-2xl shadow-cyan-950/60 backdrop-blur-xl sm:p-7"
+        className="relative mx-auto max-h-[calc(100dvh-2rem)] w-full max-w-lg overflow-y-auto overscroll-contain rounded-[2rem] border border-cyan-200/25 bg-slate-950/80 p-5 text-cyan-50 shadow-2xl shadow-cyan-950/60 backdrop-blur-xl [-webkit-overflow-scrolling:touch] sm:p-7"
         role="dialog"
       >
         <div className="absolute -right-12 -top-12 size-36 rounded-full bg-cyan-300/15 blur-2xl" />

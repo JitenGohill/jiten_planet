@@ -17,6 +17,7 @@ const INTRO_DISMISSED_KEY = "planet-scene-intro-dismissed";
 
 export default function PlanetScene() {
   const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const [showNavigationHint, setShowNavigationHint] = useState(true);
   const [showIntro, setShowIntro] = useState(false);
   const [selectedMarkerId, setSelectedMarkerId] =
     useState<LocationMarkerId | null>(null);
@@ -32,13 +33,29 @@ export default function PlanetScene() {
     return () => window.cancelAnimationFrame(frameId);
   }, []);
 
+  useEffect(() => {
+    if (showIntro) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowNavigationHint(false);
+    }, 10000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [showIntro]);
+
   function dismissIntro() {
     window.sessionStorage.setItem(INTRO_DISMISSED_KEY, "true");
     setShowIntro(false);
   }
 
   return (
-    <div className="relative h-screen w-screen touch-none overflow-hidden bg-black">
+    <div
+      className={`relative h-screen w-screen overflow-hidden bg-black ${
+        showIntro ? "touch-pan-y" : "touch-none"
+      }`}
+    >
       <Canvas
         aria-label="Stylized three-dimensional purple space background"
         camera={{ far: 220, fov: 50, near: 0.1, position: [0, 0, 7.5] }}
@@ -75,11 +92,11 @@ export default function PlanetScene() {
             marker={selectedMarker}
             onClose={() => setSelectedMarkerId(null)}
           />
-        ) : (
+        ) : showNavigationHint ? (
           <div className="rounded-full border border-white/15 bg-slate-950/55 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-cyan-100/80 shadow-2xl shadow-cyan-950/40 backdrop-blur-md">
             Drag to spin / scroll or pinch to zoom / select a pin
           </div>
-        )}
+        ) : null}
       </div>
       <SocialLinks />
       {showIntro ? <IntroPopup onDismiss={dismissIntro} /> : null}
