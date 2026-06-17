@@ -1,5 +1,4 @@
 import type { LocationContent } from "../types";
-import { buildingModeStory } from "./building-mode";
 import { crossListerStory } from "./cross-lister";
 import { queenMaryStory } from "./queen-mary";
 
@@ -16,5 +15,5 @@ export const londonLocation = {
   summary:
     "London is the working base camp: the place for projects, technical growth, university memories, and the next versions of the portfolio to launch from.",
   tags: ["Product", "Engineering", "Stories"],
-  stories: [queenMaryStory, buildingModeStory, crossListerStory],
+  stories: [queenMaryStory, crossListerStory],
 } satisfies LocationContent;
