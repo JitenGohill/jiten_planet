@@ -1,6 +1,6 @@
 import { Box3, Matrix4, type Object3D, Vector3 } from "three";
 
-import { GLOBE_RADIUS } from "./constants";
+import { GLOBE_RADIUS } from "../constants";
 
 type GeometryObject = Object3D & {
   geometry?: {

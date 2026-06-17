@@ -3,16 +3,16 @@
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useState } from "react";
 
-import { BlenderGlobe } from "./blender-globe";
-import { InteractionControls } from "./interaction-controls";
-import { IntroPopup } from "./intro-popup";
-import { LocationCard } from "./location-card";
-import { LocationStoryCard } from "./location-story-card";
-import { locationMarkers, type LocationMarkerId, type LocationStory } from "./location-markers";
-import { SceneLights } from "./scene-lights";
-import { SkyBackdrop } from "./sky-backdrop";
-import { SocialLinks } from "./social-links";
-import { StarField } from "./star-field";
+import { BlenderGlobe } from "./globe/blender-globe";
+import { InteractionControls } from "./controls/interaction-controls";
+import { IntroPopup } from "./overlays/intro-popup";
+import { LocationCard } from "./overlays/location-card";
+import { LocationStoryCard } from "./overlays/location-story-card";
+import { locationMarkers, type LocationMarkerId, type LocationStory } from "@/content/locations";
+import { SceneLights } from "./environment/scene-lights";
+import { SkyBackdrop } from "./environment/sky-backdrop";
+import { SocialLinks } from "./overlays/social-links";
+import { StarField } from "./environment/star-field";
 
 const INTRO_DISMISSED_KEY = "planet-scene-intro-dismissed";
 

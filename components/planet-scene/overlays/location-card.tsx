@@ -1,6 +1,6 @@
 "use client";
 
-import type { LocationMarker, LocationStory } from "./location-markers";
+import type { LocationMarker, LocationStory } from "@/content/locations";
 
 export function LocationCard({
   marker,

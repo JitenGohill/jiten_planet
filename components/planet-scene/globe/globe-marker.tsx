@@ -4,7 +4,7 @@ import { Html } from "@react-three/drei";
 import { useState } from "react";
 import { AdditiveBlending } from "three";
 
-import type { LocationMarker, LocationMarkerId } from "./location-markers";
+import type { LocationMarker, LocationMarkerId } from "@/content/locations";
 
 export function GlobeMarker({
   active,

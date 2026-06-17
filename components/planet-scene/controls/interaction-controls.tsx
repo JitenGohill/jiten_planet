@@ -2,7 +2,7 @@
 
 import { OrbitControls } from "@react-three/drei";
 
-import { GLOBE_BASE_Y } from "./constants";
+import { GLOBE_BASE_Y } from "../constants";
 
 export function InteractionControls({
   onInteractionChange,

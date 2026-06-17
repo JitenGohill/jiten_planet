@@ -1,6 +1,6 @@
 "use client";
 
-import type { LocationMarker, LocationStory } from "./location-markers";
+import type { LocationMarker, LocationStory } from "@/content/locations";
 
 export function LocationStoryCard({
   marker,
@@ -11,6 +11,8 @@ export function LocationStoryCard({
   onClose: () => void;
   story: LocationStory;
 }) {
+  const video = "video" in story ? story.video : null;
+
   return (
     <div className="pointer-events-auto absolute inset-0 z-20 overflow-y-auto overscroll-contain bg-black/40 px-4 py-4 backdrop-blur-[2px] touch-pan-y sm:grid sm:place-items-center sm:py-8">
       <article
@@ -48,7 +50,27 @@ export function LocationStoryCard({
           <p className="mt-3 text-sm font-semibold uppercase tracking-[0.2em] text-cyan-200/80">
             {marker.label}, {marker.country}
           </p>
-          <p className="mt-5 text-base leading-7 text-slate-100/85">{story.body}</p>
+
+          {video ? (
+            <div className="mt-6 overflow-hidden rounded-[1.4rem] border border-cyan-200/20 bg-black/35 shadow-2xl shadow-cyan-950/40">
+              <div className="relative pt-[56.25%]">
+                <iframe
+                  allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                  allowFullScreen
+                  className="absolute inset-0 size-full"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  src={video.src}
+                  title={video.title}
+                />
+              </div>
+            </div>
+          ) : null}
+
+          <div className="mt-5 space-y-4 text-base leading-7 text-slate-100/85">
+            {story.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
 
           <div className="mt-7 flex flex-wrap gap-2">
             {story.tags.map((tag) => (

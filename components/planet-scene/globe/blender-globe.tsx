@@ -6,9 +6,9 @@ import { type ReactNode, useMemo, useRef } from "react";
 import type { Group } from "three";
 
 import { AtmosphereGlow } from "./atmosphere-glow";
-import { GLOBE_BASE_Y, GLOBE_MODEL_PATH, hiddenModelObjects } from "./constants";
+import { GLOBE_BASE_Y, GLOBE_MODEL_PATH, hiddenModelObjects } from "../constants";
 import { GlobeMarker } from "./globe-marker";
-import { locationMarkers, type LocationMarkerId } from "./location-markers";
+import { locationMarkers, type LocationMarkerId } from "@/content/locations";
 import { getVisibleModelRadius } from "./model-bounds";
 
 export function BlenderGlobe({
