@@ -7,7 +7,8 @@ import { BlenderGlobe } from "./blender-globe";
 import { InteractionControls } from "./interaction-controls";
 import { IntroPopup } from "./intro-popup";
 import { LocationCard } from "./location-card";
-import { locationMarkers, type LocationMarkerId } from "./location-markers";
+import { LocationStoryCard } from "./location-story-card";
+import { locationMarkers, type LocationMarkerId, type LocationStory } from "./location-markers";
 import { SceneLights } from "./scene-lights";
 import { SkyBackdrop } from "./sky-backdrop";
 import { SocialLinks } from "./social-links";
@@ -21,6 +22,7 @@ export default function PlanetScene() {
   const [showIntro, setShowIntro] = useState(false);
   const [selectedMarkerId, setSelectedMarkerId] =
     useState<LocationMarkerId | null>(null);
+  const [selectedStory, setSelectedStory] = useState<LocationStory | null>(null);
   const selectedMarker = locationMarkers.find(
     (marker) => marker.id === selectedMarkerId,
   );
@@ -50,6 +52,16 @@ export default function PlanetScene() {
     setShowIntro(false);
   }
 
+  function selectMarker(markerId: LocationMarkerId) {
+    setSelectedStory(null);
+    setSelectedMarkerId(markerId);
+  }
+
+  function closeLocationCard() {
+    setSelectedStory(null);
+    setSelectedMarkerId(null);
+  }
+
   return (
     <div
       className={`relative h-screen w-screen overflow-hidden bg-black ${
@@ -68,7 +80,7 @@ export default function PlanetScene() {
         }}
         onPointerMissed={() => {
           document.body.style.cursor = "";
-          setSelectedMarkerId(null);
+          closeLocationCard();
         }}
         role="img"
       >
@@ -81,7 +93,7 @@ export default function PlanetScene() {
         <Suspense fallback={null}>
           <BlenderGlobe
             isUserInteracting={isUserInteracting}
-            onSelectMarker={setSelectedMarkerId}
+            onSelectMarker={selectMarker}
             selectedMarkerId={selectedMarkerId}
           />
         </Suspense>
@@ -90,7 +102,8 @@ export default function PlanetScene() {
         {selectedMarker ? (
           <LocationCard
             marker={selectedMarker}
-            onClose={() => setSelectedMarkerId(null)}
+            onClose={closeLocationCard}
+            onSelectStory={setSelectedStory}
           />
         ) : showNavigationHint ? (
           <div className="rounded-full border border-white/15 bg-slate-950/55 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-cyan-100/80 shadow-2xl shadow-cyan-950/40 backdrop-blur-md">
@@ -99,6 +112,13 @@ export default function PlanetScene() {
         ) : null}
       </div>
       <SocialLinks />
+      {selectedMarker && selectedStory ? (
+        <LocationStoryCard
+          marker={selectedMarker}
+          onClose={() => setSelectedStory(null)}
+          story={selectedStory}
+        />
+      ) : null}
       {showIntro ? <IntroPopup onDismiss={dismissIntro} /> : null}
     </div>
   );

@@ -55,6 +55,25 @@ export function GlobeMarker({
           document.body.style.cursor = "pointer";
         }}
       >
+        <sphereGeometry args={[active ? 0.22 : 0.18, 20, 20]} />
+        <meshBasicMaterial depthWrite={false} opacity={0} transparent />
+      </mesh>
+      <mesh
+        onClick={(event) => {
+          event.stopPropagation();
+          document.body.style.cursor = "";
+          onSelect(marker.id);
+        }}
+        onPointerOut={() => {
+          setIsHovered(false);
+          document.body.style.cursor = "";
+        }}
+        onPointerOver={(event) => {
+          event.stopPropagation();
+          setIsHovered(true);
+          document.body.style.cursor = "pointer";
+        }}
+      >
         <sphereGeometry args={[active ? 0.075 : 0.06, 20, 20]} />
         <meshStandardMaterial
           color={active ? "#ff4d4d" : "#ff2d2d"}
