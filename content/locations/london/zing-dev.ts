@@ -1,6 +1,6 @@
 import type { LocationStory } from "../types";
 
-export const queenMaryStory = {
+export const zingDevStory = {
   id: "queen-mary",
   eyebrow: "Education",
   title: "Queen Mary chapter",
