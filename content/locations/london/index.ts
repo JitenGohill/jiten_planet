@@ -1,6 +1,5 @@
 import type { LocationContent } from "../types";
 import { crossListerStory } from "./cross-lister";
-import { zingDevStory } from "./zing-dev";
 
 export const londonLocation = {
   id: "london",
@@ -15,5 +14,5 @@ export const londonLocation = {
   summary:
     "London is the working base camp: the place for projects, technical growth, university memories, and the next versions of the portfolio to launch from.",
   tags: ["Product", "Engineering", "Stories"],
-  stories: [zingDevStory, crossListerStory],
+  stories: [crossListerStory],
 } satisfies LocationContent;
