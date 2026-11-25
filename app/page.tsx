@@ -12,6 +12,9 @@ const links = [
 ];
 
 const RAMP = " .:-=+*#%@";
+// hover never fires on touch screens, so pressed state inverts too
+const INVERT = "hover:bg-white hover:text-black active:bg-white active:text-black";
+const GROUP_INVERT = "group-hover:text-black group-active:text-black";
 const INK = "=+*#%@";
 
 const GLYPHS: Record<string, string[]> = {
@@ -60,9 +63,12 @@ function Field({
       field.replaceChildren(probe);
       cw = probe.getBoundingClientRect().width / 20;
       ch = parseFloat(getComputedStyle(field).lineHeight);
-      cols = Math.ceil(innerWidth / cw);
-      rows = Math.ceil(innerHeight / ch);
-      heat = new Float32Array(cols * rows);
+      const c = Math.ceil(field.clientWidth / cw);
+      const r = Math.ceil(field.clientHeight / ch);
+      // mobile address bars fire resize constantly; keep the trail unless the grid changed
+      if (c !== cols || r !== rows) heat = new Float32Array(c * r);
+      cols = c;
+      rows = r;
       // one bitmap pixel = px cols by py rows; cells are about twice as tall as wide
       px = Math.max(1, Math.min(4, Math.floor(hero.clientWidth / cw / NAME_W)));
       py = Math.max(1, Math.round(px / 2));
@@ -128,15 +134,18 @@ function Field({
     raf = requestAnimationFrame(draw);
     addEventListener("resize", measure);
     addEventListener("pointermove", brush);
+    // touch scrolling cancels pointermove, so a tap also stirs the field
+    addEventListener("pointerdown", brush);
     return () => {
       cancelAnimationFrame(raf);
       removeEventListener("resize", measure);
       removeEventListener("pointermove", brush);
+      removeEventListener("pointerdown", brush);
     };
   }, [heroRef, mainRef]);
 
   const layer =
-    "pointer-events-none fixed inset-0 m-0 overflow-hidden whitespace-pre font-mono text-[14px] leading-[18px]";
+    "pointer-events-none fixed top-0 left-0 m-0 h-lvh w-full overflow-hidden whitespace-pre font-mono text-[min(14px,calc((100vw-48px)/38))] leading-[1.3] [-webkit-text-size-adjust:100%]";
   return (
     <div aria-hidden>
       <pre ref={fieldRef} className={`${layer} text-neutral-600`} />
@@ -199,14 +208,14 @@ export default function Home() {
     <div className="min-h-screen bg-black font-mono text-[14px] leading-[1.7] text-neutral-300 selection:bg-white selection:text-black">
       <Field heroRef={heroRef} mainRef={mainRef} />
 
-      <header ref={heroRef} className="relative mx-6 mt-[14vh] sm:mx-12">
+      <header ref={heroRef} className="relative mx-6 mt-[12vh] sm:mx-12 sm:mt-[14vh]">
         <h1 className="sr-only">Jiten Gohill</h1>
       </header>
 
-      <main ref={mainRef} className="relative mx-6 mt-14 max-w-[70ch] pb-40 sm:mx-12">
+      <main ref={mainRef} className="relative mx-6 mt-10 max-w-[70ch] pb-40 sm:mx-12 sm:mt-14">
         {story ? (
           <article key={story.id}>
-            <a href="#" className="text-neutral-500 hover:bg-white hover:text-black">
+            <a href="#" className={`inline-block py-2 text-neutral-500 sm:py-0 ${INVERT}`}>
               {"<- back"}
             </a>
             <p className="mt-8 text-neutral-500">{story.eyebrow.toLowerCase()}</p>
@@ -223,7 +232,7 @@ export default function Home() {
                 href={story.video.src}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-8 inline-block text-white hover:bg-white hover:text-black"
+                className={`mt-8 inline-block py-2 text-white sm:py-0 ${INVERT}`}
               >
                 {"[> watch the showcase]"}
               </a>
@@ -235,7 +244,10 @@ export default function Home() {
             <p className="text-white">
               <Decode text="software engineer. lusaka -> london -> tampa" />
             </p>
-            <p className="mt-2 text-neutral-500">move your cursor through the field.</p>
+            <p className="mt-2 text-neutral-500">
+              <span className="[@media(pointer:coarse)]:hidden">move your cursor through</span>
+              <span className="hidden [@media(pointer:coarse)]:inline">tap</span> the field.
+            </p>
 
             <Rule label="index" />
             <ol>
@@ -243,13 +255,13 @@ export default function Home() {
                 <li key={s.id}>
                   <a
                     href={`#${s.id}`}
-                    className="group flex w-full gap-[2ch] hover:bg-white hover:text-black"
+                    className={`group flex w-full gap-[2ch] py-2 sm:py-0 ${INVERT}`}
                   >
-                    <span className="text-neutral-500 group-hover:text-black">
+                    <span className={`text-neutral-500 ${GROUP_INVERT}`}>
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <span className="flex-1 text-white group-hover:text-black">{s.title}</span>
-                    <span className="hidden text-neutral-500 group-hover:text-black sm:inline">
+                    <span className={`flex-1 text-white ${GROUP_INVERT}`}>{s.title}</span>
+                    <span className={`hidden text-neutral-500 sm:inline ${GROUP_INVERT}`}>
                       {s.tags.join(" / ").toLowerCase()}
                     </span>
                   </a>
@@ -258,14 +270,14 @@ export default function Home() {
             </ol>
 
             <Rule label="elsewhere" />
-            <p className="flex gap-[3ch]">
+            <p className="flex flex-wrap gap-x-[3ch]">
               {links.map(([label, href]) => (
                 <a
                   key={label}
                   href={href}
                   target={href.startsWith("http") ? "_blank" : undefined}
                   rel="noreferrer"
-                  className="text-white hover:bg-white hover:text-black"
+                  className={`py-2 text-white sm:py-0 ${INVERT}`}
                 >
                   {label}
                 </a>
