@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jiten Gohill | Planet Portfolio",
-  description: "Take a glipmse into my world!",
+  title: "Jiten Gohill",
+  description: "Software engineer. Lusaka -> London -> Tampa.",
 };
 
 export default function RootLayout({

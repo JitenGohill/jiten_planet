@@ -9,10 +9,11 @@
 
 ## Portfolio Direction
 
-- Build this as a single-page personal portfolio centered on an animated, low-poly, Earth-recognizable globe with playful/adventurous styling.
-- Use the globe as the primary navigation surface: clickable location markers should open info cards for projects, skills, travel, life, or stories.
-- Initial required markers are Lusaka, Zambia and London, England; keep marker data easy to extend rather than hard-coding copy into the scene.
-- Prefer a hybrid visual language: recognizable Earth geography, but stylized/fantasy lighting, atmosphere, stars, and card treatments instead of a corporate portfolio look.
+- This is a single-page personal portfolio in black and white ASCII: monospace text only, no images, icons, colour or rounded UI chrome.
+- The whole page lives in `app/page.tsx`: an animated character field (`Field`) draws the background and the block-letter name, and the copy sits in a plain text column the field fades around.
+- Stories come from `content/locations`; the page flattens every location's `stories` into one index. Add a story there rather than hard-coding copy into the page.
+- The open story is the URL hash (`/#cross-listing`), so links stay as plain `<a href="#id">`.
+- Keep it tasteful: sparse, slow motion, and honour `prefers-reduced-motion`.
 
 ## Commands
 
